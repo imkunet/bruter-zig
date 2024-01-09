@@ -19,11 +19,8 @@ jobs:
         - run: zig build -Dtarget=x86_64-linux -Doptimize=ReleaseFast
         - run: zig build -Dtarget=x86_64-windows -Doptimize=ReleaseFast
         
-        - name: Upload Release Asset
-          uses: softprops/action-gh-release@v1
-          if: github.ref == 'refs/heads/main'
+        - name: Create Release
+          uses: actions/checkout@v3
+          uses: ncipollo/release-action@v1
           with:
-            files: |
-              release/bruter
-              release/bruter.exe
-            tag_name: ${{ vars.VERSION }}
+            artifacts: "release/bruter,release/bruter.exe"
