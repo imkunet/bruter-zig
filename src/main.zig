@@ -37,7 +37,7 @@ var config = struct {
     comment: []const u8 = undefined,
     threads: usize = 1,
     output: []const u8 = "bruted",
-    report_every: usize = 10_000,
+    report_every: usize = 50_000,
 }{};
 
 var opt_search = .{
@@ -95,7 +95,7 @@ var opt_report_every = .{
 
 var app = &cli.App{
     .author = "KuNet (https://github.com/imkunet)",
-    .version = "0.1.0",
+    .version = "0.1.1",
     .command = .{
         .name = "bruter",
         .description = .{ .one_line = "Brute force an Ed25519 ssh key to your liking" },
@@ -212,7 +212,7 @@ pub fn main() !void {
 }
 
 fn run_app() !void {
-    log.info("bruter v0.1.0", .{});
+    log.info("bruter 0.1.1", .{});
 
     fs.cwd().access(config.output, .{}) catch |err| switch (err) {
         error.FileNotFound => {},

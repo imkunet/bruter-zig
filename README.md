@@ -8,9 +8,19 @@ you came to the right place.
 ```
 bruter -C myemail@gmail.com -s "book,worm"
 ```
-*this executed on my computer with an `AMD 5800X3D` in 11.198 seconds*
+*this executed on my computer with an `AMD 5800X3D` in 640ms*
 
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA`BOoK`thRZZ0DbDwsxzvStDIpqXJowdo8z1/XVcdRO/+ myemail@gmail.com
+
+maybe you want a cooler one: perhaps with the word at the end
+```
+bruter -C myemail@gmail.com --suffix-only -s "book,worm"
+```
+*this executed on my computer with an `AMD 5800X3D` in 17.33s*
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBnTme8nnHxP21BgXv9c/i9GesmkC0xrtAV/LF7C`BOOK` myemail@gmail.com
+
+Just remember it's all luck based! Happy hunting!
 
 ## how to run (even lazier edition)
 
