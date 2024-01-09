@@ -26,4 +26,4 @@ jobs:
             files: |
               release/bruter
               release/bruter.exe
-            tag_name: ${{ env.VERSION }}
+            tag_name: ${{ vars.VERSION }}
