@@ -1,4 +1,5 @@
 const std = @import("std");
+const builtin = @import("builtin");
 const openssh = @import("openssh.zig");
 const cli = @import("zigcli");
 
@@ -26,7 +27,7 @@ pub const std_options = struct {
     pub const logFn = @import("log.zig").coloredLogFn;
 };
 
-const version = "0.1.11";
+const version = "0.1.2";
 
 var gpa = GeneralPurposeAllocator(.{}){};
 const allocator = gpa.allocator();
@@ -95,7 +96,7 @@ var opt_report_every = .{
     .value_name = "TIMES",
 };
 
-var app = &cli.App{
+var app = &.{
     .author = "KuNet (https://github.com/imkunet)",
     .version = version,
     .command = .{
@@ -202,6 +203,11 @@ fn worker_inner(worker_id: usize) !void {
 
 fn write_file(worker_id: usize, relative_path: []const u8, content: []const u8) !void {
     const output_file = try fs.cwd().createFile(relative_path, .{});
+    if (builtin.os.tag != .windows) {
+        output_file.setPermissions(.{ .inner = .{ .mode = 0o600 } }) catch {
+            wlog.info("[#{d:0>2}] unable to lock down {s}, make sure to deny permissions from other users manually!", .{ worker_id, relative_path });
+        };
+    }
     try output_file.writeAll(content);
     output_file.close();
 
@@ -242,8 +248,8 @@ fn run_app() !void {
         }
 
         for (current_item) |c| {
-            if (!ascii.isAlphanumeric(c)) {
-                log.err("search terms should be alphanumeric", .{});
+            if (mem.indexOfScalar(u8, &Base64.alphabet_chars, c) == null) {
+                log.err("search terms should be base64 compatible: \"{s}\"", .{Base64.alphabet_chars});
                 os.exit(1);
             }
         }
