@@ -23,7 +23,7 @@ jobs:
         - run: zig build -Dtarget=x86_64-windows -Doptimize=ReleaseFast && mv zig-out/bin/bruter.exe zig-out/bin/bruter-x86_64-windows.exe && mv zig-out/bin/bruter.pdb zig-out/bin/bruter-x86_64-windows.pdb
         - run: zig build -Dtarget=x86_64-macos -Doptimize=ReleaseFast && mv zig-out/bin/bruter zig-out/bin/bruter-x86_64-macos
         - run: zig build -Dtarget=aarch64-macos -Doptimize=ReleaseFast && mv zig-out/bin/bruter zig-out/bin/bruter-aarch64-macos
-        - run: bash -c "sha256sum bruter-* | awk 'BEGIN {print \"| File | SHA256 |\n|-|-|\"} {printf(\"| %s | %s |\n\", \$2, \$1)}' > body.md"
+        - run: bash -c "sha256sum zig-out/bin/bruter-* | awk 'BEGIN {print \"| File | SHA256 |\n|-|-|\"} {printf(\"| %s | `%s` |\n\", \$2, \$1)}' > body.md"
         
         - name: Create Release
           uses: ncipollo/release-action@v1
