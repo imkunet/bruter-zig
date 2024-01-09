@@ -29,5 +29,7 @@ do the processing in the process.
 the old version on my computer crunched around ~100 keys/s using up all 16 threads on my system.
 the new version can use 1 thread and crunch ~1400 keys/s on my system.
 
+EDIT: 💀 folks i forgot to enable optimizations now it's doing ~18k keys/s
+
 use the new version and not the old version.
 
