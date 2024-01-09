@@ -1,0 +1,36 @@
+name: release
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+jobs:
+    build:
+      runs-on: ubuntu-latest
+      name: build
+      steps:
+        - uses: actions/checkout@v3
+
+        - name: Setup Zig
+          uses: korandoru/setup-zig@v1
+          with:
+            zig-version: master
+        - run: zig build -Dtarget=x86_64-linux -Doptimize=ReleaseFast
+        
+        - name: Build for Windows
+        - run: zig build -Dtarget=x86_64-windows -Doptimize=ReleaseFast
+
+        - name: Deploy to pages
+          uses: JamesIves/github-pages-deploy-action@v4
+          with:
+            folder: zig-out/docs
+        
+        - name: Upload Release Asset
+          uses: softprops/action-gh-release@v1
+          if: github.ref == 'refs/heads/main'
+          with:
+            files: |
+              release/bruter
+              release/bruter.exe
+            tag_name: ${{ env.VERSION }}
