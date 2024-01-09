@@ -26,6 +26,8 @@ pub const std_options = struct {
     pub const logFn = @import("log.zig").coloredLogFn;
 };
 
+const version = "0.1.11";
+
 var gpa = GeneralPurposeAllocator(.{}){};
 const allocator = gpa.allocator();
 
@@ -95,7 +97,7 @@ var opt_report_every = .{
 
 var app = &cli.App{
     .author = "KuNet (https://github.com/imkunet)",
-    .version = "0.1.1",
+    .version = version,
     .command = .{
         .name = "bruter",
         .description = .{ .one_line = "Brute force an Ed25519 ssh key to your liking" },
@@ -212,7 +214,7 @@ pub fn main() !void {
 }
 
 fn run_app() !void {
-    log.info("bruter 0.1.1", .{});
+    log.info("bruter {s}", .{version});
 
     fs.cwd().access(config.output, .{}) catch |err| switch (err) {
         error.FileNotFound => {},

@@ -18,11 +18,16 @@ jobs:
           uses: korandoru/setup-zig@v1
           with:
             zig-version: master
-        - run: zig build -Dtarget=x86_64-linux -Doptimize=ReleaseFast
-        - run: zig build -Dtarget=x86_64-windows -Doptimize=ReleaseFast
+        - run: zig build -Dtarget=x86_64-linux -Doptimize=ReleaseFast && mv zig-out/bin/bruter zig-out/bin/bruter-x86_64-linux
+        - run: zig build -Dtarget=aarch64-linux -Doptimize=ReleaseFast && mv zig-out/bin/bruter zig-out/bin/bruter-aarch64-linux
+        - run: zig build -Dtarget=x86_64-windows -Doptimize=ReleaseFast && mv zig-out/bin/bruter.exe zig-out/bin/bruter-x86_64-windows.exe && mv zig-out/bin/bruter.pdb zig-out/bin/bruter-x86_64-windows.pdb
+        - run: zig build -Dtarget=x86_64-macos -Doptimize=ReleaseFast && mv zig-out/bin/bruter zig-out/bin/bruter-x86_64-macos
+        - run: zig build -Dtarget=aarch64-macos -Doptimize=ReleaseFast && mv zig-out/bin/bruter zig-out/bin/bruter-aarch64-macos
+        - run: sha256sum bruter-* | awk 'BEGIN {print "| File | SHA256 |\n|-|-|"} {printf("| %s | %s |\n", $2, $1)}'
         
         - name: Create Release
           uses: ncipollo/release-action@v1
           if: ${{ startsWith(github.ref, 'refs/tags/') }}
           with:
-            artifacts: "zig-out/bin/bruter,zig-out/bin/bruter.exe"
+            artifacts: "zig-out/bin/bruter-*"
+            bodyFile: "body.md"
