@@ -1,7 +1,9 @@
-![GitHub Tag](https://img.shields.io/github/v/tag/imkunet/bruter-zig)
-[![GitHub Downloads](https://img.shields.io/github/downloads/imkunet/bruter-zig/total?color=green)](https://github.com/imkunet/bruter-zig/releases/latest)
 # [![bruter-zig](assets/bruter.svg)](https://github.com/imkunet/bruter-zig/)
-<p align="center">*Brute force an SSH key for custom branding!*</p>
+*<p align="center">Brute force an SSH key for custom branding!</p>*
+<p align="center">
+  <img src="https://img.shields.io/github/v/tag/imkunet/bruter-zig" alt="GitHub Tag" />
+  <a href="https://github.com/imkunet/bruter-zig/releases/latest"><img src="https://img.shields.io/github/downloads/imkunet/bruter-zig/total?color=green" alt="GitHub Downloads" /></a>
+</p>
 
 ## How it works
 To get a desired word like *book* or *worm* in a key, we can use bruter to automatically generate
