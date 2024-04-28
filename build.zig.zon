@@ -3,8 +3,8 @@
     .version = "0.1.20",
     .dependencies = .{
         .zigcli = .{
-            .url = "https://github.com/sam701/zig-cli/archive/fef13e1771db65492381a073c83cf175fbbdf632.tar.gz",
-            .hash = "1220b1cc7c256080eb3229d95a8519d6a33035dc83558a8ca1ed6e407008a38fe2c2",
+            .url = "https://github.com/sam701/zig-cli/archive/8c7a798c0f7fa0358d7ab41106fc872fca4cd995.tar.gz",
+            .hash = "1220c008492d9460c3be2b209600a948181e6efb3bf0d79a1633def499632e708f4b",
         },
     },
 

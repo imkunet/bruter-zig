@@ -9,6 +9,7 @@ const fmt = std.fmt;
 const fs = std.fs;
 const mem = std.mem;
 const os = std.os;
+const posix = std.posix;
 
 const PublicKeyHeader = openssh.PublicKeyHeader;
 const PublicKeyHeaderName = openssh.PublicKeyHeaderName;
@@ -22,9 +23,9 @@ const Base64 = std.base64.standard;
 const log = std.log.scoped(.main);
 const wlog = std.log.scoped(.worker);
 
-pub const std_options = struct {
-    pub const log_level = .debug;
-    pub const logFn = @import("log.zig").coloredLogFn;
+pub const std_options = .{
+    .log_level = .debug,
+    .logFn = @import("log.zig").coloredLogFn,
 };
 
 const version = "0.1.20";
@@ -142,7 +143,7 @@ fn update_state(worker_id: usize, add: usize) !void {
 
 fn worker(worker_id: usize) void {
     worker_inner(worker_id) catch |e| {
-        @atomicStore(bool, &stopper, true, .Release);
+        @atomicStore(bool, &stopper, true, .release);
         std.debug.panic("!!! WORKER #{d} CRASHED: {}", .{ worker_id, e });
     };
 }
@@ -164,8 +165,8 @@ fn worker_inner(worker_id: usize) !void {
             const predicate = if (config.suffix_only) mem.endsWith(u8, haystack, needle) else mem.indexOf(u8, haystack, needle) != null;
             if (predicate) {
                 // should not happen but you never know
-                if (@atomicLoad(bool, &stopper, .Acquire)) return;
-                @atomicStore(bool, &stopper, true, .Release);
+                if (@atomicLoad(bool, &stopper, .acquire)) return;
+                @atomicStore(bool, &stopper, true, .release);
 
                 wlog.info("[#{d:0>2}] found term: {s}", .{ worker_id, needle });
                 wlog.info("{s} {s} {s}", .{ PublicKeyHeaderName, final_encoded, config.comment });
@@ -194,7 +195,7 @@ fn worker_inner(worker_id: usize) !void {
             }
         }
 
-        if (@atomicLoad(bool, &stopper, .Acquire)) return;
+        if (@atomicLoad(bool, &stopper, .acquire)) return;
 
         i += 1;
         if (i % config.report_every == 0) try update_state(worker_id, config.report_every);
@@ -226,7 +227,7 @@ fn run_app() !void {
         error.FileNotFound => {},
         else => {
             log.err("unknown error accessing output file {!}", .{err});
-            os.exit(1);
+            posix.exit(1);
         },
     };
 
@@ -244,13 +245,13 @@ fn run_app() !void {
         const current_item = current_split_item.?;
         if (current_item.len == 0) {
             log.err("there can be no empty search terms", .{});
-            os.exit(1);
+            posix.exit(1);
         }
 
         for (current_item) |c| {
             if (mem.indexOfScalar(u8, &Base64.alphabet_chars, c) == null) {
                 log.err("search terms should be base64 compatible: \"{s}\"", .{Base64.alphabet_chars});
-                os.exit(1);
+                posix.exit(1);
             }
         }
 
@@ -260,7 +261,7 @@ fn run_app() !void {
 
     if (split_list.items.len == 0) {
         log.err("you must specify at least 1 search term", .{});
-        os.exit(1);
+        posix.exit(1);
     }
 
     log.info("searching terms:", .{});
@@ -278,7 +279,7 @@ fn run_app() !void {
     const threads_desired = config.threads;
     if (threads_desired > thread_count) {
         log.err("{d} threads requested when there are only {d} threads on the system", .{ threads_desired, thread_count });
-        os.exit(1);
+        posix.exit(1);
     }
 
     log.info("{d} threads avaliable, running {d} threads", .{ thread_count, threads_desired });
