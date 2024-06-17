@@ -22,8 +22,14 @@ pub fn coloredLogFn(comptime level: log.Level, comptime scope: @TypeOf(.EnumLite
     const scope_text = comptime if (scope == .default) RESET ++ ": " else esc("90") ++ " [" ++ @tagName(scope) ++ "]" ++ RESET ++ ": ";
 
     const stderr = std.io.getStdErr().writer();
-    std.debug.getStderrMutex().lock();
-    defer std.debug.getStderrMutex().unlock();
+    var bw = std.io.bufferedWriter(stderr);
+    const writer = bw.writer();
 
-    nosuspend stderr.print(level_text ++ scope_text ++ format ++ "\n", args) catch return;
+    std.debug.lockStdErr();
+    defer std.debug.unlockStdErr();
+
+    nosuspend {
+        writer.print(level_text ++ scope_text ++ format ++ "\n", args) catch return;
+        bw.flush() catch return;
+    }
 }

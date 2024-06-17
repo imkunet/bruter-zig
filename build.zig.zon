@@ -1,6 +1,6 @@
 .{
     .name = "bruter",
-    .version = "0.1.20",
+    .version = "0.1.4",
     .dependencies = .{
         .zigcli = .{
             .url = "https://github.com/sam701/zig-cli/archive/8c7a798c0f7fa0358d7ab41106fc872fca4cd995.tar.gz",

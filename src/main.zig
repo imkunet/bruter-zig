@@ -28,7 +28,7 @@ pub const std_options = .{
     .logFn = @import("log.zig").coloredLogFn,
 };
 
-const version = "0.1.20";
+const version = "0.1.4";
 
 var gpa = GeneralPurposeAllocator(.{}){};
 const allocator = gpa.allocator();
