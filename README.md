@@ -46,7 +46,7 @@ Just remember it's all luck based! The more specific the search, the longer it'l
 If you want to download and use it right away, you can use the badge above to go to the downloads page
 and simply select the platform you're on and download it.
 
-To compile it, you'll need the 0.12.0 release of [Zig](https://github.com/ziglang/zig) and binaries can be found [here](https://ziglang.org/download/).
+To compile it, you'll need the 0.13.0 release of [Zig](https://github.com/ziglang/zig) and binaries can be found [here](https://ziglang.org/download/).
 
 It's recommended that if you want to get good keys/sec to compile in fast mode:
 ```bash
